@@ -1,6 +1,6 @@
 .DS_Store
-kata/node_modules
-kata/dist
+*/node_modules
+*/dist
 
 # local env files
 .env.local
