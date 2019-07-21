@@ -1,5 +1,3 @@
-import Compile from './compile'
-
 class KVue {
     constructor(options) {
         this.$options = options
@@ -9,7 +7,7 @@ class KVue {
         this.observe(this.$data)
 
             // 创建编译器
-        new Compile(options.el, this);
+        new Compile(options.el, this)
 
         if (options.created) {
             options.created.call(this);
@@ -47,6 +45,7 @@ class KVue {
             }
         })
     }
+
     proxyData(key) {
         Object.defineProperty(this, key, {
             get() {
