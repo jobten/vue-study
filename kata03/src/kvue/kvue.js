@@ -63,13 +63,14 @@ class Dep {
         this.deps = []
     }
     addDep(watcher) {
-        this.deps.append(watcher)
+        this.deps.push(watcher)
     }
     notify() {
         this.deps.forEach(watcher => watcher.update())
     }
 }
 
+// Watcher实例中要更新DOM, 所以可以在compile过程中创建
 class Watcher {
     constructor(vm, key, cb) {
         this.vm = vm
