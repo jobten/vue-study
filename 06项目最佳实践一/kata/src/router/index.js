@@ -11,7 +11,7 @@ export const constRoutes = [
         hidden: true //导航菜单忽略该项
     },
     {
-        path: '',
+        path: '/',
         component: Layout,
         redirect: '/home',
         meta: {
@@ -22,6 +22,7 @@ export const constRoutes = [
             {
                 path: 'home',
                 component: () => import('@/views/home'),
+                name: 'home',
                 meta: {
                     title: 'Home',
                     icon: 'qq'
@@ -30,6 +31,7 @@ export const constRoutes = [
             {
                 path: 'home2',
                 component: () => import('@/views/home'),
+                name: 'home2',
                 meta: {
                     title: 'Home2',
                     icon: 'wx'
@@ -49,6 +51,7 @@ export const asyncRoutes = [
             {
                 path: 'index',
                 component: () => import('@/views/about'),
+                name: "about",
                 meta: {
                     title: 'About',
                     icon: 'qq',
@@ -56,8 +59,9 @@ export const asyncRoutes = [
                 }
             },
             {
-                path: 'bla',
+                path: 'about2',
                 component: () => import('@/views/about'),
+                name: "about2",
                 meta: {
                     title: 'About2',
                     icon: 'qq',
