@@ -11,8 +11,8 @@ const store = new Vuex.Store({
         permission
     },
     getters: {
-        role: state => state.user.roles,
-        permission_routers: state => state.permission.routes
+        roles: state => state.user.roles,
+        permission_routes: state => state.permission.routes
     }
 })
 

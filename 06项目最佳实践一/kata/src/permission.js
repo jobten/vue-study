@@ -8,7 +8,6 @@ const whiteList = ['/login']
 
 
 router.beforeEach(async (to, from, next) => {
-
     const hasToken = getToken()
 
     if(hasToken) {
@@ -38,7 +37,8 @@ router.beforeEach(async (to, from, next) => {
             }
         }
     } else {
-        if (whiteList.includes(to.path)) {
+        if (whiteList.indexOf(to.path) !== -1) {
+            // 白名单路由放过
             next()
         } else {
             next(`/login?redirect=${to.path}`)

@@ -4,6 +4,7 @@ import Layout from '@/layout' //布局页面
 
 Vue.use(Router)
 
+// 通用页面：这里的配置时不需要权限的
 export const constRoutes = [
     {
         path: '/login',
@@ -25,13 +26,13 @@ export const constRoutes = [
                 name: 'home',
                 meta: {
                     title: 'Home',
-                    icon: 'qq'
+                    icon: 'wx'
                 }                
             },
             {
-                path: 'home2',
+                path: 'mua',
                 component: () => import('@/views/home'),
-                name: 'home2',
+                name: 'mua',
                 meta: {
                     title: 'Home2',
                     icon: 'wx'
@@ -41,30 +42,31 @@ export const constRoutes = [
     }
 
 ]
-
+// 权限页面
 export const asyncRoutes = [
     {
         path: '/about',
         component: Layout,
         redirect: '/about/index',
+        meta: {title: '关于', icon:'qq'},
         children: [
             {
                 path: 'index',
-                component: () => import('@/views/about'),
+                component: () => import('@/views/about.vue'),
                 name: "about",
                 meta: {
                     title: 'About',
-                    icon: 'qq',
+                    icon: 'wx',
                     roles: ['editor']
                 }
             },
             {
-                path: 'about2',
-                component: () => import('@/views/about'),
-                name: "about2",
+                path: 'bla',
+                component: () => import('@/views/about.vue'),
+                name: "bla",
                 meta: {
                     title: 'About2',
-                    icon: 'qq',
+                    icon: 'wx',
                     roles: ['admin']
                 }
             }
