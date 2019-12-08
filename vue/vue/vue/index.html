@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>implement a simple vue</title>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 插值支持 -->
+        <p>{{ name }}</p>
+        <!-- 指令支持 -->
+        <p v-text="name"></p>
+        <!-- v-model支持 -->
+        <input type='text' v-model="name">
+        <button @click="changeName">changeName</button>
+        <!-- v-html支持 -->
+        <div v-html="html"></div>
+    </div>
+    <script src="./compile.js"></script>
+    <script src="./vue.js"></script>
+
+    <script>
+        const vue = new Vue({
+            el: "#app",
+            data() {
+                return {
+                    name: "I am a test",
+                    html: '<button>我是由v-html创建的button</button>'
+                }
+            },
+            created() {
+                console.log('开始啦')
+                setTimeout(() => {
+                    this.name = "我是测试"
+                }, 1500);
+            },
+            methods: {
+                changeName() {
+                    this.name = '我的名字改变啦'
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>
