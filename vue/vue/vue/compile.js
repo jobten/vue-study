@@ -7,7 +7,7 @@ class Compile {
     constructor(el, vm) {
             this.$el = document.querySelector(el)
             this.$vm = vm
-            console.log("original el - ", this.$el)
+                // console.log("original el - ", this.$el)
             if (this.$el) {
                 // 1. 将node转换成fragment
                 this.$fragment = this.node2Fragment(this.$el)
@@ -15,7 +15,7 @@ class Compile {
                 this.compile(this.$fragment)
                     // 3. 将编译结果追加至DOM中
                 this.$el.appendChild(this.$fragment)
-                console.log('el after compiled - ', this.$el)
+                    // console.log('el after compiled - ', this.$el)
             }
         }
         //读取node，转换成代码片段Fragment(createDocumentFragment)
@@ -66,21 +66,26 @@ class Compile {
     }
 
     compileElement(node) {
-        console.log('compileElement node - ', node)
-        const nodeAttrs = node.nodeAttrs
-        nodeAttrs.forEach(attr => {
+        // console.log('compileElement node - ', node)
+        const nodeAttrs = node.attributes
+
+        Array.from(nodeAttrs).forEach(attr => {
             const name = attr.name
             const value = attr.value
 
+            // 暂时只考虑v-html, v-text, v-model
             if (name.startsWith('v-')) {
-                const dir = name.substring(2)
-
+                const nodeType = name.substring(2)
+                this[nodeType] && this[nodeType](node, this.$vm, value)
+            } else if (name.startsWith('@')) {
+                const eventName = name.substring(1)
+                this.eventHandler(node, this.$vm, value, eventName)
             }
         })
     }
 
     compileText(node) {
-        console.log('compileText node - ', node)
+        // console.log('compileText node - ', node)
         const exp = RegExp.$1.trim() // 去除两端空格
         this.update(node, this.$vm, exp, 'text')
     }
@@ -89,14 +94,36 @@ class Compile {
     // node是需要更新的节点
     // vm是vue实例
     // exp是表达式，即当前节点内容
-    // dir表示节点类型: text, html, model
-    update(node, vm, exp, dir) {
-        console.log('update -', node, vm, exp, dir)
-        const fn = this[dir + 'Updator']
-        fn && fn(node, vm.$data[exp])
+    // nodeType表示节点类型: text, html, model
+    update(node, vm, exp, nodeType) {
+        // console.log('update -', node, vm, exp, nodeType)
+        const fn = this[nodeType + 'Updator']
             // vm中将vm.$data直接映射到vm中, 所有vm[exp]实践为vm.$data[exp]的值
-            // fn && fn(node, vm[exp])
+        fn && fn(node, vm[exp])
+
+        // 每个key加上一个Watcher
+        new Watcher(vm, exp, function() {
+            fn && fn(node, vm[exp])
+        })
     }
+
+    text(node, vm, exp) {
+        this.update(node, vm, exp, 'text')
+    }
+
+    html(node, vm, exp) {
+        this.update(node, vm, exp, 'html')
+    }
+
+    model(node, vm, exp) {
+        this.update(node, vm, exp, 'model')
+
+        //输入时改变数据,更新界面
+        node.addEventListener('input', el => {
+            vm[exp] = el.target.value
+        })
+    }
+
 
     textUpdator(node, val) {
         node.textContent = val
@@ -107,6 +134,15 @@ class Compile {
     }
 
     modelUpdator(node, val) {
+        node.value = val
+    }
 
+    eventHandler(node, vm, exp, eventName) {
+        const fn = vm.$option.methods && vm.$option.methods[exp]
+
+        // 防止this指向问题一定方法一定要绑定vm环境
+        if (fn && eventName) {
+            node.addEventListener(eventName, fn.bind(vm, exp))
+        }
     }
 }

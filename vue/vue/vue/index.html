@@ -20,6 +20,9 @@
         <!-- v-html支持 -->
         <div v-html="html"></div>
     </div>
+    <script src="./watcher.js"></script>
+    <script src="./dep.js"></script>
+    <script src="./observer.js"></script>
     <script src="./compile.js"></script>
     <script src="./vue.js"></script>
 
@@ -40,7 +43,7 @@
             },
             methods: {
                 changeName() {
-                    this.name = '我的名字改变啦'
+                    this.$data.name = '我的名字改变啦'
                 }
             },
         })
